@@ -1,0 +1,250 @@
+%%% Scribe template for CS5200 approximation algorithms.
+%%% Adapted with some modifications from UC-Berkeley template, and Prahladh Harsha (TIFR) scribe templates
+
+
+%%%%%%%%%% Do Not Alter these lines %%%%%%%%%%%%%
+\documentclass[11pt]{article}
+\usepackage{amsmath}
+\usepackage{amssymb,amsfonts}
+\usepackage{amsthm}
+\usepackage{fullpage}
+\usepackage{graphicx}
+\usepackage[bookmarks,colorlinks,breaklinks]{hyperref}  % PDF hyperlinks, with coloured links
+\hypersetup{linkcolor=blue,citecolor=blue,filecolor=blue,urlcolor=blue} % all blue links
+\numberwithin{equation}{section}
+\newcommand{\lref}[2][]{\hyperref[#2]{#1~\ref*{#2}}}
+\renewcommand{\eqref}[2][]{\hyperref[#2]{(\ref*{#2})}}
+\setlength{\oddsidemargin}{.25in}
+\setlength{\evensidemargin}{.25in}
+\setlength{\textwidth}{6in}
+\setlength{\topmargin}{-0.4in}
+\setlength{\textheight}{8.5in}
+\usepackage{algorithm}
+\usepackage{algorithmic} %% For writing algorithms
+
+%%% Theorem environments %%%%%%%%
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{observation}[theorem]{Observation}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{fact}[theorem]{Fact}
+\newtheorem{assumption}[theorem]{Assumption}
+
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\handout}[5]{
+   \renewcommand{\thepage}{#1-\arabic{page}}
+   \renewcommand{\thetheorem}{#1.\arabic{theorem}}
+   \renewcommand{\thesection}{#1.\arabic{section}}
+   \noindent
+   \begin{center}
+   \framebox{
+      \vbox{
+    \hbox to 5.90in { {\bf CS5200: Approximation Algorithms}
+     	 \hfill #2 }
+       \vspace{4mm}
+       \hbox to 5.90in {  {\Large \hfill #5  \hfill} }
+       \vspace{2mm}
+       \hbox to 5.90in { {\it #3 \hfill #4} }
+      }
+   }
+   \end{center}
+{\bf Disclaimer}: {\it These notes have not been subjected to the
+	usual scrutiny reserved for formal publications.  They may be distributed
+	outside this class only with the permission of the Instructor.}
+%\vspace*{2mm}
+   %\vspace*{4mm}
+}
+\newcommand{\lecture}[5]{\handout{#1}{#2}
+{Lecturer: #3}
+{Scribe: #4}
+{Lec #1:  #5}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%% Bibtex/References  stuff
+\renewcommand{\cite}[1]{[#1]}
+\def\beginrefs{\begin{list}%
+		{[\arabic{equation}]}{\usecounter{equation}
+			\setlength{\leftmargin}{2.0truecm}\setlength{\labelsep}{0.4truecm}%
+			\setlength{\labelwidth}{1.6truecm}}}
+	\def\endrefs{\end{list}}
+\def\bibentry#1{\item[\hbox{[#1]}]}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%% Macros for approximation algorithms
+\mathchardef\mhyphen="2D  %%% for hyphenation in math-mode
+
+
+\newcommand{\Z}{{\mathbb Z}}
+\newcommand{\R}{{\mathbb R}}
+\newcommand{\Q}{{\mathbb Q}}
+\newcommand{\F}{{\mathbb F}}
+
+
+\newcommand{\poly}{\text{poly}}
+\renewcommand{\epsilon}{\varepsilon}
+\newcommand{\eps}{\epsilon}
+\renewcommand{\phi}{\varphi}
+\newcommand{\ALG}{\mathsf{ALG}}
+\newcommand{\OPT}{\mathsf{OPT}}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%% ADD / MODIFY BELOW THIS POINT ONLY %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%% Scribe's Macros%%%%%%%%%%%%%
+% You can add your own macros here. E.g. to define a new command that is useful for the lecture
+%E.g. here define the name for "Min-Vertex-Cover" that occurs in this lecture
+\newcommand{\minVC}{\mathsf{Min\mhyphen VC}}
+\newcommand{\minSC}{\mathsf{Min\mhyphen Set \mhyphen Cover}}
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+%%%% Fill in the approrpiate details on this line details %%%%%%%%%%%%%%%%%%
+%%\lecture{lecture number}{date}{name of lecturer}{name of scribe}{title of lecture} 
+%% eg: for the first lecture scribed by XYZ, it'd be
+\lecture{20}{6 Apr 2023}{Rakesh Venkat}{C.Asish}{Algorithm for Minimum Vertex Cover}
+
+
+%% **** YOUR NOTES GO HERE:
+
+% Some general latex examples and examples making use of the
+% macros follow.  
+%**** IN GENERAL, BE BRIEF
+
+
+
+
+\section{Primal Dual algorithm for shortest path}
+
+In this section, we state Primal LP and Dual LP for shortest s-t path problem. We also visualise those Linear Programs. 
+
+\begin{definition}[shortest s-t path problem ]
+Given an undirected graph G  = (V,E), non-negative costs $c_e \geq 0$ on all edges $e \in E$, and a pair of distinguished vertices s and t. The goal is to find minimum-cost path from s to t 
+\end{definition}
+
+%%% Note how theorems are referenced, to enable hyperlinks. can reference sections etc also using $\lref$.
+
+
+\subsection{Primal LP}
+
+Consider variables  $x_{e}$ for each edge e, such that 
+
+    $$ x_e = \begin{cases}
+    1 & \text{ edge e is  selected in shortest path } \\
+    0 & \text{ othewise}
+    
+    \end{cases}
+$$
+
+    The Primal Linear Program can be formulated as 
+    
+\begin{align*}
+\min \sum_e c_ex_e \\
+\text{subject to: }  \sum_{e \in \delta(S) }x_e\ \geq 1, \hspace{1em} \forall  S\\
+x_e \in \{0,1\}, \hspace{1em}  \forall e \in E
+\end{align*}
+
+Where S be the  all the s-t cuts in the graph and 
+$\delta(S)$ is the set of all edges that have one endpoint in S and the other endpoint not in S
+
+\subsection{Dual LP}
+
+    The Dual Linear Program can be formulated as 
+
+\begin{align*}
+\max \sum_s y_s \\
+\text{subject to: }  \sum_{s : e \in \delta(S) }y_s\ \leq c_e, \hspace{1em} \forall  e \in E\\
+y_s \geq 0, \hspace{1em}  \forall s \in S
+\end{align*}
+
+Where S be the  all the s-t cuts in the graph and 
+$\delta(S)$ is the set of all edges that have one endpoint in S and the other endpoint not in S
+
+\subsection{Visualisation}
+
+Here the dual variables $y_S$ can be interpreted as "moats" surrounding the set S of width  $y_S$. and any path from s to t must cross this moat so we can say that the cost should be at least  $y_S$.
+
+Moats must be non overlapping, and thus for any edge e, we cannot have edge e crossing moats of total width more than $c_e$; thus the dual constraint $\sum_{s : e \in \delta(S) }y_s\ \leq c_e$.
+
+We can have many moats, and any s-t path must cross them all, and have a total length at most $ \sum_{s\in S} y_s $
+
+\subsection{Algorithm}
+
+\begin{algorithm}
+	\caption{Primal Dual Algorithm}
+	\label{alg:GreedyVC}
+ 
+	\textbf{Input:} Graph $G=(V,E)$ \\
+	\textbf{Output:} $S \subseteq V$ that  forms a vertex cover
+
+
+	\begin{algorithmic}[1] 
+		\STATE $y \leftarrow \emptyset$ \\ $F \leftarrow \emptyset$
+		\WHILE { no s-t path in (V,F)} 
+		\STATE let C be the connected component of (V,F) Containing s,  increase $y_C$ until there is an edge $e^{`} \in \delta(C)$ such that $\sum_{s\in S : e^{`} \in \delta(S) }y_s\ = c_e^{`}$.\\
+        \STATE $ F \leftarrow F \cup {e^{`}}$
+        \ENDWHILE
+        \RETURN s-t path in (V,F)
+        
+	\end{algorithmic}
+\end{algorithm}
+
+	\begin{claim}
+		$F$ is always a tree 
+	\end{claim}
+	\begin{proof}[Proof Of Claim]
+         In every step of loop we add an edge $e^{`}$ from the set $\delta$(C) to our solution F,where C is a connected component of (V,F) containing s.and as exactly one endpoint of $e^{`}$ is in C, $e^{`}$ cannot close a cycle in the tree F(i.e the other end of the edge $e^{`}$ will not be in F ) and  therefore a cycle cannot be formed 
+	\end{proof}
+
+	\begin{claim}
+	  Algorithm 1.1.4 returns a shortest s-t path 
+	\end{claim}
+	\begin{proof}[Proof Of Claim]
+      Let P be the path returned by the algorithm  \\
+      For every edge $e\in P $, we know $c_e =  \sum_{s: e\in \delta(S) }y_s $  \\
+      and  $\sum_{e \in P }c_e$ =  $\sum_{e \in P }\sum_{s: e\in \delta(S) }y_s $  = $\sum_{S: s\in S,t\notin S}|P \cap \delta (S) |y_s$\\
+       if we can show that whenever $y_s>0$, we have $|P\cap \delta (S)| = 1$ \\ then we will show that  $\sum_{e \in P }c_e  = \sum_{S: s\in S,t\notin S}y_s \leq OPT$ \\
+       and we know P is a s-t path of cost no less than OPT, it must have cost exactly OPT.
+
+       proof:- as we only increase $y_s$ when F is a spanning tree of S, and as P cannot come back into S else it would form a cycle within tree on S 
+       
+	\end{proof}
+
+\section{Introduction to Steiner Forest problem}
+
+\begin{definition}[Steiner Forest problem ]
+Given an undirected graph G  = (V,E), non-negative costs $c_e \geq 0$ for all edges $e \in E$, and k pairs of  vertices $s_i$ and $t_i$. The goal is to find minimum-cost subset edges $F \subseteq E$ such that every  $s_i$ - $t_i$ pair is connected in the set set of selected edges; that is  $s_i$ a and  $t_i$ are connected in (V,F) for all i 
+\end{definition}
+
+\begin{claim}
+	There is a Algorithm which gives 2-approximation for the generalized steiner tree problem 
+	\end{claim}
+ 
+\section*{References}
+\beginrefs
+\bibentry{CW87}{\sc David P.Williamson } and {\sc David B.Shmoys}, 
+``The Design of Approximation Algorithms ''
+\endrefs
+
+%% Add in other references here, as appropriate.
+
+\end{document}
+
+
+
